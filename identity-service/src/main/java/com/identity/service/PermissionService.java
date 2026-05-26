@@ -15,6 +15,9 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -29,11 +32,33 @@ public class PermissionService {
         if(permission.getPermission() == null || permission.getPermission_name() == null){
             throw new AppException(ErrorCode.PERMISSION_NOT_BLANK);
         }
+        boolean exitedById = permissionRepository.existsById(PermissionEnum.valueOf(request.getPermision()));
+        if(exitedById == true) throw new AppException(ErrorCode.PERMISSION_IS_EXITED);
+
         permission.setPermission(PermissionEnum.valueOf(request.getPermision()));
         permission.setPermission_name(PermissionNameEnum.valueOf(request.getPermissionName()));
         permission.setDesciption(request.getDescription());
         permissionRepository.save(permission);
 
         return permissionMaper.toPermissionReponse(permission);
+    }
+
+    public void delete(String permission){
+        if(permission==null) throw new AppException(ErrorCode.PERMISSION_INVALID);
+        boolean exits = Arrays.stream(PermissionEnum.values())
+                        .map(Enum::name)
+                                .anyMatch(name -> name.equals(permission));
+        if(!exits) throw new AppException(ErrorCode.PERMISSION_NOT_BLANK);
+
+
+        permissionRepository.deleteById(PermissionEnum.valueOf(permission));
+    }
+
+    public List<PermissionReponse> getAllPermission(){
+
+        var result = permissionRepository.findAll();
+
+        return result.stream()
+                .map(permissionMaper::toPermissionReponse).toList();
     }
 }

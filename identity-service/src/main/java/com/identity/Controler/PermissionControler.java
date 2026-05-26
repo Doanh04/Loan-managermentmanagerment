@@ -8,10 +8,9 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/permission")
@@ -27,4 +26,21 @@ public class PermissionControler {
                 .result(permissionService.createPermission(permissionRequest))
                 .build();
     }
+
+    @DeleteMapping("/delete-permission/{permission}")
+    ApiResponse deletePermission(@PathVariable String permission){
+        permissionService.delete(permission);
+
+        return ApiResponse.builder()
+                .message("Delete is complete.")
+                .build();
+    }
+
+    @GetMapping("get-all-permission")
+    ApiResponse<List<PermissionReponse>> getAllPermission(){
+        return ApiResponse.<List<PermissionReponse>>builder()
+                .message("This is full data permission")
+                .result(permissionService.getAllPermission())
+                .build();
+    };
 }
