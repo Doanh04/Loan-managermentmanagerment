@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -13,9 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RolePeResponse {
-    String Role;
-
-    @Builder.Default
-    Set<PermissionRoleResponse> permissionRole = new HashSet<>();
+public class RolePermissionReponse {
+    String role;
+    Set<PermissionRes> permissionReponse;
 }

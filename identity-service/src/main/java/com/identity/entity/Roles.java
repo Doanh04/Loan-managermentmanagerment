@@ -20,7 +20,7 @@ public class Roles {
     @Id
     @Column(name = "Role", columnDefinition = "VARCHAR(100)")
     @Enumerated(EnumType.STRING)
-    RolesEnum Role;
+    RolesEnum role;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Name_role", unique = true, columnDefinition = "VARCHAR(100)")
