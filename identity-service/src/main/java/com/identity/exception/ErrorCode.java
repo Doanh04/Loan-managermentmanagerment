@@ -17,7 +17,9 @@ public enum ErrorCode {
     ROLE_INVALID(1005, "Role Invalid", HttpStatus.NOT_FOUND),
     ROLE_NAME_INVALID(1006, "Role Name Invalid", HttpStatus.NOT_FOUND),
     ROLE_NOT_BLANK(1007, "Role is not blank", HttpStatus.BAD_REQUEST),
-    ROLE_IS_EXITED(1008, "Role is exited",HttpStatus.CONFLICT)
+    ROLE_IS_EXITED(1008, "Role is exited",HttpStatus.CONFLICT),
+    ROLE_NOT_FOUND(1009,"role not found", HttpStatus.CONFLICT),
+    PERMISSION_NOT_FOUND(1010,"Permission not found", HttpStatus.CONFLICT)
     ;
 
     ErrorCode(int code, String mesage, HttpStatusCode statusCode) {

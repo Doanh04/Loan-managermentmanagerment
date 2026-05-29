@@ -35,21 +35,45 @@ public class RolePermissionService {
     @Transactional
     public RolePermissionReponse createRolePermission(RolesEnum RoleRequest, PermissionEnum permissionEnum){
         Roles role = roleRepository.findById(RoleRequest)
-                .orElseThrow(() -> new AppException(ErrorCode.ROLE_INVALID));
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
 
         Permission permission = permissonRepository.findById(permissionEnum)
-                .orElseThrow(() -> new AppException(ErrorCode.PERMISSION_IS_EXITED));
+                .orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOT_FOUND));
 
+        Set<Permission> allPermisison = role.getPermission();
+        if(allPermisison.contains(permission)) throw new AppException(ErrorCode.PERMISSION_IS_EXITED);
 
-        Set<Permission> permissionSet = new HashSet<>();
-        permissionSet.add(permission);
-
-        role.setPermission(permissionSet);
+        allPermisison.add(permission);
 
         roleRepository.save(role);
 
         return rolePermissionMapper.toRolePermissionReponse(role);
     }
 
+    public List<RolePermissionReponse> getAllRolePermission(){
+        List<Roles> rolePermission = roleRepository.findAll();
 
+        return rolePermission.stream().map(rolePermissionMapper::toRolePermissionReponse).toList();
+    }
+
+    public void removePermissionFromRole(RolesEnum roles, PermissionEnum permissions){
+        Roles role = roleRepository.findById(roles)
+                .orElseThrow(()-> new AppException(ErrorCode.ROLE_NOT_FOUND));
+
+        Permission permission = permissonRepository.findById(permissions)
+                .orElseThrow(()->new AppException(ErrorCode.PERMISSION_NOT_FOUND));
+
+        role.getPermission().remove(permission);
+
+        roleRepository.save(role);
+    }
+
+    public void clearAllRolePermission(RolesEnum roles){
+        Roles role = roleRepository.findById(roles)
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+
+        role.getPermission().clear();
+
+        roleRepository.save(role);
+    }
 }
