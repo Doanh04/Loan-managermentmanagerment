@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> handlingIllegalArgumentException(IllegalArgumentException exception) {
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setCode(400);
-        apiResponse.setMessage("Dữ liệu truyền vào không khớp với cấu hình hệ thống: " + exception.getMessage());
+        apiResponse.setMessage("Permission or Role Invalid: " + exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
