@@ -21,10 +21,7 @@ public class UserCreationRequest {
     String userName;
     @Size(min = 8, message = "INVALID_PASSWORD")
     String passWord;
-    Instant createAt;
     String phoneNumber;
-    @ValidateEnum(enumCLASS = UserStatus.class, message = "STATUS_NOT_FOUND")
-    String status;
     @Email(message = "INVALID_EMAIL")
     @NotBlank(message = "EMAIL_IS_REQUIRED")
     String email_verified;

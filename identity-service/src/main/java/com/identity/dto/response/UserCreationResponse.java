@@ -7,6 +7,9 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -15,10 +18,12 @@ import java.time.Instant;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserCreationResponse {
+    String userId;
     String userName;
-    String passWord;
-    Instant createAt;
     String phoneNumber;
     String status;
     String email_verified;
+    boolean verified;
+    Set<RolePermissionReponse> rolePermissionResponse;
+    LocalDateTime create_at;
 }

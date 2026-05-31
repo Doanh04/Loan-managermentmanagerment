@@ -5,4 +5,5 @@ public enum RolesEnum {
     LOAN_UNDERWRITER, //Nhân viên tín dụng
     LOAN_MANAGER, //Giám đốc chi nhánh,
     ACCOUNTANT,// Kế toán
+    CUSTOMER,//Người dùngdùng
 }

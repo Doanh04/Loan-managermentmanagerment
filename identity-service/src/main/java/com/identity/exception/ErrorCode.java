@@ -27,7 +27,8 @@ public enum ErrorCode {
     INVALID_EMAIL(1014, "invalid email", HttpStatus.BAD_REQUEST),
     EMAIL_IS_REQUIRED(1015, "email is required", HttpStatus.BAD_REQUEST),
     USERNAME_IS_EXITED(1016, "User name is exited", HttpStatus.BAD_REQUEST),
-    EMAIL_VERIFIED_EXITED(1017, "Email is exited", HttpStatus.BAD_REQUEST)
+    EMAIL_VERIFIED_EXITED(1017, "Email is exited", HttpStatus.BAD_REQUEST),
+    USER_EXITED(1018, "User is exited", HttpStatus.BAD_REQUEST)
             ;
 
     ErrorCode(int code, String mesage, HttpStatusCode statusCode) {

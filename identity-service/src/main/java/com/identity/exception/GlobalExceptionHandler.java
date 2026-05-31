@@ -31,25 +31,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(errorCode.getStatusCode()).body(apiResponse);
     }
 
-    // exception lỗi role và permission
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse> handlingValidationBuildAnotaion(MethodArgumentNotValidException exception) {
-        String enumKey = exception.getBindingResult().getFieldError().getDefaultMessage();
-
-        ErrorCode errorCode = ErrorCode.UKNOWN_ERROR; // Mặc định
-        try {
-            errorCode = ErrorCode.valueOf(enumKey); // Tra ngược chuỗi "PERMISSION_INVALID" thành Enum ErrorCode
-        } catch (IllegalArgumentException e) {
-            // Giữ nguyên mặc định nếu gõ sai Key message
-        }
-
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setCode(errorCode.getCode());
-        apiResponse.setMessage(errorCode.getMesage());
-
-        return ResponseEntity.status(errorCode.getStatusCode()).body(apiResponse);
-    }
-
     // Lưới bảo hiểm cuối cùng: Hứng lỗi ép kiểu Enum sai nếu vô tình lọt xuống tầng trong
     @ExceptionHandler(value = IllegalArgumentException.class)
     public ResponseEntity<ApiResponse> handlingIllegalArgumentException(IllegalArgumentException exception) {
@@ -71,7 +52,7 @@ public class GlobalExceptionHandler {
             errorCode = ErrorCode.valueOf(enumKey);
 
             var constraintViolation =
-                    exception.getBindingResult().getAllErrors().getFirst().unwrap(ConstraintViolation.class);
+                    exception.getBindingResult().getAllErrors().get(0).unwrap(ConstraintViolation.class);
 
             attributes = constraintViolation.getConstraintDescriptor().getAttributes();
 

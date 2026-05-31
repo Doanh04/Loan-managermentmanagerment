@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,26 +21,32 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "User_Id")
-    String User_Id;
+    String user_Id;
 
-    @Column(name = "Username", columnDefinition = "VARCHAR(255)")
-    String Username;
+    @Column(name = "Username", columnDefinition = "VARCHAR(255)", unique = true)
+    String username;
 
-    @Column(name = "Password")
-    String Password;
+    @Column(name = "Password", nullable = false)
+    String password;
 
-    @Column(name = "email_verified", columnDefinition = "VARCHAR(255)")
+    @Column(name = "email_verified" ,columnDefinition = "VARCHAR(255)", unique = true)
     String email_verified;
 
-    @Column(name = "Phone_Number", columnDefinition = "VARCHAR(12)")
-    String Phone_Number;
+    @Column(name = "verified")
+    boolean verified;
+
+    @Column(name = "Phone_Number", columnDefinition = "VARCHAR(12)", unique = true, nullable = false)
+    String phone_Number;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Status", columnDefinition = "TIMESTAMP(6)")
-    UserStatus Status;
+    UserStatus status;
 
     @Column(name = "Create_at")
-    Instant Create_at;
+    LocalDateTime create_at;
+
+    @Column(name = "update_at")
+    LocalDateTime update_at;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -48,4 +55,5 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "Role")
     )
     Set<Roles> Roles = new HashSet<>();
+
 }
