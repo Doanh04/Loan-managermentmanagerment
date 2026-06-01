@@ -17,6 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,11 +27,11 @@ public class User {
     @Column(name = "Username", columnDefinition = "VARCHAR(255)", unique = true)
     String username;
 
-    @Column(name = "Password", nullable = false)
+    @Column(name = "Password", nullable = false, columnDefinition = "VARCHAR(255)")
     String password;
 
     @Column(name = "email_verified" ,columnDefinition = "VARCHAR(255)", unique = true)
-    String email_verified;
+    String emailVerified;
 
     @Column(name = "verified")
     boolean verified;
@@ -39,7 +40,7 @@ public class User {
     String phone_Number;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "Status", columnDefinition = "TIMESTAMP(6)")
+    @Column(name = "Status", columnDefinition = "VARCHAR(50)")
     UserStatus status;
 
     @Column(name = "Create_at")

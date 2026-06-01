@@ -13,12 +13,12 @@ public interface UserMaper {
     @Mapping(source = "userName", target = "username")
     @Mapping(source = "passWord", target = "password")
     @Mapping(source = "phoneNumber", target = "phone_Number")
-    @Mapping(source = "email_verified", target = "email_verified")
+    @Mapping(source = "email_verified", target = "emailVerified")
     User toUserEntity(UserCreationRequest userRequest);
 
     @Mapping(source = "user_Id", target = "userId")
     @Mapping(source = "username", target = "userName")
-    @Mapping(source = "email_verified", target = "email_verified")
+    @Mapping(source = "emailVerified", target = "email_verified")
     @Mapping(source = "verified", target = "verified")
     @Mapping(source = "roles", target = "rolePermissionResponse")
     @Mapping(source = "phone_Number", target = "phoneNumber")

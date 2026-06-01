@@ -16,6 +16,7 @@ import com.identity.Constain.RolesEnum;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Table(name = "")
 public class Roles {
     @Id
     @Column(name = "Role", columnDefinition = "VARCHAR(100)")

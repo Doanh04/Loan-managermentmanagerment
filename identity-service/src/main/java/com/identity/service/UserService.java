@@ -37,8 +37,7 @@ public class UserService {
         boolean userName = userRepository.existsByUsername(userRequest.getUserName());
         if(userName) throw new AppException(ErrorCode.USERNAME_IS_EXITED);
 
-        boolean email = userRepository.existsByEmail(userRequest.getEmail_verified());
-
+        boolean email = userRepository.existsByEmailVerified(userRequest.getEmail_verified());
         if(email) throw new AppException(ErrorCode.EMAIL_VERIFIED_EXITED);
 
         User user =userMaper.toUserEntity(userRequest);
@@ -63,4 +62,6 @@ public class UserService {
 
         return userMaper.toUserResponse(user);
     }
+
+
 }
