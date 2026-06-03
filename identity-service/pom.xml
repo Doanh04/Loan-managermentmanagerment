@@ -39,6 +39,11 @@
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
+<!--        Sercurity-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 <!--       OAuth2  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -16,6 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Table(name = "permission")
 public class Permission {
     @Id
     @Enumerated(EnumType.STRING)
