@@ -8,6 +8,8 @@ import com.identity.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface UserMaper {
     @Mapping(source = "userName", target = "username")
@@ -25,7 +27,10 @@ public interface UserMaper {
     @Mapping(source = "create_at", target = "create_at")
     UserCreationResponse toUserResponse(User userEntity);
 
+
     @Mapping(source = "role", target = "role")
     @Mapping(source = "permission", target = "permissionReponse")
     RolePermissionReponse toRolePermissionReponse(Roles role);
+
+
 }

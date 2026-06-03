@@ -11,6 +11,7 @@ import com.identity.entity.Roles;
 import com.identity.entity.User;
 import com.identity.exception.AppException;
 import com.identity.exception.ErrorCode;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,7 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -33,6 +36,7 @@ public class UserService {
     PasswordEncoder passwordEncoder;
     RolesRepository roleRepository;
 
+    @Transactional
     public UserCreationResponse createUser(UserCreationRequest userRequest){
         boolean userName = userRepository.existsByUsername(userRequest.getUserName());
         if(userName) throw new AppException(ErrorCode.USERNAME_IS_EXITED);
@@ -63,5 +67,33 @@ public class UserService {
         return userMaper.toUserResponse(user);
     }
 
+    public List<UserCreationResponse> getAllUser(){
+        var allUser = userRepository.findAll();
+        return allUser.stream().map(userMaper::toUserResponse).toList();
+    }
+
+    public UserCreationResponse getByUserName(String userName){
+        User result = userRepository.findByUsername(userName);
+        if(result == null) throw new AppException(ErrorCode.USER_NOT_FOUND);
+
+        return userMaper.toUserResponse(result);
+    }
+
+    @Transactional
+    public void deleteByUserName(String userName){
+        if(userName == null){
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        boolean username = userRepository.existsByUsername(userName);
+        if(!username) throw new AppException(ErrorCode.USER_NOT_FOUND);
+
+        User user = userRepository.findByUsername(userName);
+            if(user.getStatus()==UserStatus.BANNED){
+                throw new AppException(ErrorCode.StATUS_BANNED);
+            }
+
+        userRepository.deleteUserByUsername(userName, LocalDateTime.now());
+    }
 
 }

@@ -27,8 +27,14 @@ public class SercurityConfig {
 
     private final CustomJwtDecoder customJwtDecoder;
 
-    private final String[] PUBLIC_ENPOINT = {
+    private final String[] PUBLIC_ENPOINT_POST = {
             "/user/create-user"
+    };
+    private final String[] PUBLIC_ENPOINT_GET= {
+            "/user/{username}"
+    };
+    private final String[] PUBLIC_ENPONT_DELETE = {
+            "/user/{userName}"
     };
 
     public SercurityConfig(CustomJwtDecoder customJwtDecoder) {
@@ -37,8 +43,10 @@ public class SercurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSercurity) throws Exception {
-        httpSercurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENPOINT)
-                .permitAll()
+        httpSercurity.authorizeHttpRequests(request -> request
+                .requestMatchers(HttpMethod.POST, PUBLIC_ENPOINT_POST).permitAll()
+                .requestMatchers(HttpMethod.GET, PUBLIC_ENPOINT_GET).permitAll()
+                .requestMatchers(HttpMethod.DELETE, PUBLIC_ENPONT_DELETE).permitAll()
                 .anyRequest()
                 .authenticated());
 

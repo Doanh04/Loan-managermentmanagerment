@@ -29,7 +29,10 @@ public enum ErrorCode {
     USERNAME_IS_EXITED(1016, "User name is exited", HttpStatus.BAD_REQUEST),
     EMAIL_VERIFIED_EXITED(1017, "Email is exited", HttpStatus.BAD_REQUEST),
     USER_EXITED(1018, "User is exited", HttpStatus.BAD_REQUEST),
-    UNAUTHENTICATED(1019, "You do not have permission", HttpStatus.FORBIDDEN)
+    UNAUTHENTICATED(1019, "You do not have permission", HttpStatus.FORBIDDEN),
+    UNAUTHORIZED(1020, "You do not have permission", HttpStatus.FORBIDDEN),
+    USER_NOT_FOUND(1021, "do not find user with user name", HttpStatus.NOT_FOUND),
+    StATUS_BANNED(1022, "state already implemented", HttpStatus.BAD_REQUEST)
             ;
 
     ErrorCode(int code, String mesage, HttpStatusCode statusCode) {

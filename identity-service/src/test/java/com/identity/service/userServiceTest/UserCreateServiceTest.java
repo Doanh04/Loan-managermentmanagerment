@@ -36,7 +36,7 @@ import java.util.Set;
 @ExtendWith(MockitoExtension.class)
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
-class UserServiceTest {
+class UserCreateServiceTest {
     @Mock
     @NonFinal
     UserRepository userRepository;
@@ -53,9 +53,6 @@ class UserServiceTest {
     User user;
     UserCreationRequest userRequest;
     UserCreationResponse userResponse;
-    PermissionReponse permissionResponse;
-    RoleResponse roleResponse;
-    RolePermissionReponse rolePermissionReponse;
     Roles role;
 
 
@@ -118,7 +115,7 @@ class UserServiceTest {
                 .user_Id("abcxyz")
                 .username("0865393278")
                 .password("hashedPasword")
-                .email_verified("dgrunt04@gmail.com")
+                .emailVerified("dgrunt04@gmail.com")
                 .verified(false)
                 .phone_Number("0865393278")
                 .status(UserStatus.WAITING_ACTIVE)
@@ -145,7 +142,7 @@ class UserServiceTest {
     @Test
     void createUserSuccess(){
         Mockito.when(userRepository.existsByUsername(any())).thenReturn(false);
-        Mockito.when(userRepository.existsByEmail(any())).thenReturn(false);
+        Mockito.when(userRepository.existsByEmailVerified(any())).thenReturn(false);
         Mockito.when(userMaper.toUserEntity(any())).thenReturn(user);
         Mockito.when(passwordEncoder.encode("Doanh@123")).thenReturn("hashedPasword");
         Mockito.when(roleRepository.findById(any())).thenReturn(Optional.of(role));
@@ -173,7 +170,7 @@ class UserServiceTest {
     @Test
     void create_false_ExitsByEmail(){
         Mockito.when(userRepository.existsByUsername(any())).thenReturn(false);
-        Mockito.when(userRepository.existsByEmail(any())).thenReturn(true);
+        Mockito.when(userRepository.existsByEmailVerified(any())).thenReturn(true);
 
         AppException exception = assertThrows(AppException.class, ()->{
             userService.createUser(userRequest);
