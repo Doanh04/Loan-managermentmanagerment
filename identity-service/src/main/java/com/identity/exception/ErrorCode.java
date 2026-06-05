@@ -30,7 +30,7 @@ public enum ErrorCode {
     EMAIL_VERIFIED_EXITED(1017, "Email is exited", HttpStatus.BAD_REQUEST),
     USER_EXITED(1018, "User is exited", HttpStatus.BAD_REQUEST),
     UNAUTHENTICATED(1019, "You do not have permission", HttpStatus.FORBIDDEN),
-    UNAUTHORIZED(1020, "You do not have permission", HttpStatus.FORBIDDEN),
+    UNAUTHORIZED(1020, "UserName or password incorrect", HttpStatus.FORBIDDEN),
     USER_NOT_FOUND(1021, "do not find user with user name", HttpStatus.NOT_FOUND),
     StATUS_BANNED(1022, "state already implemented", HttpStatus.BAD_REQUEST)
             ;
