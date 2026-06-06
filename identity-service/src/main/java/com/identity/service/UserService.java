@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +68,7 @@ public class UserService {
         return userMaper.toUserResponse(user);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('PERMISSION_SYSTEM_CONFIG')")
     public List<UserCreationResponse> getAllUser(){
         var allUser = userRepository.findAll();
         return allUser.stream().map(userMaper::toUserResponse).toList();
@@ -80,6 +82,7 @@ public class UserService {
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('PERMISSION_SYSTEM_CONFIG')")
     public void deleteByUserName(String userName){
         if(userName == null){
             throw new AppException(ErrorCode.USER_NOT_FOUND);
