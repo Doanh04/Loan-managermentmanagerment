@@ -28,7 +28,7 @@ public class SercurityConfig {
     private final CustomJwtDecoder customJwtDecoder;
 
     private final String[] PUBLIC_ENPOINT_POST = {
-            "/user/create-user"
+            "/user/create-user", "/auth/login", "/auth/logout", "/auth/refresh"
     };
     private final String[] PUBLIC_ENPOINT_GET= {
             "/user/{username}"

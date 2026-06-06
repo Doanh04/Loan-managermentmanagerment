@@ -12,6 +12,7 @@ import com.identity.exception.ErrorCode;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -24,6 +25,7 @@ public class RoleService {
     RolesRepository rolesRepository;
     RolesMaper roleMaper;
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('PERMISSION_SYSTEM_CONFIG')")
     public RoleResponse createRole(RolesRequest request){
         Roles roles = roleMaper.toRolesEntity(request);
 
@@ -39,6 +41,7 @@ public class RoleService {
         return roleMaper.toRoleResponse(roles);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('PERMISSION_SYSTEM_CONFIG')")
     public void deleteRole(String roles){
         if(roles == null) throw new AppException(ErrorCode.ROLE_INVALID);
         boolean exited = Arrays.stream(RolesEnum.values())
@@ -50,6 +53,7 @@ public class RoleService {
         rolesRepository.deleteById(RolesEnum.valueOf(roles));
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('PERMISSION_SYSTEM_CONFIG')")
     public List<RoleResponse> getAllRoles(){
         var result = rolesRepository.findAll();
 

@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -26,6 +27,7 @@ public class PermissionService {
     PerrmissionRepository permissionRepository;
     PermissionMaper permissionMaper;
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('PERMISSION_SYSTEM_CONFIG')")
     public PermissionReponse createPermission(PermissionRequest request){
 
         Permission permission = permissionMaper.toPermissionEntity(request);
@@ -43,6 +45,7 @@ public class PermissionService {
         return permissionMaper.toPermissionReponse(permission);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('PERMISSION_SYSTEM_CONFIG')")
     public void delete(String permission){
         if(permission==null) throw new AppException(ErrorCode.PERMISSION_INVALID);
         boolean exits = Arrays.stream(PermissionEnum.values())
@@ -54,6 +57,7 @@ public class PermissionService {
         permissionRepository.deleteById(PermissionEnum.valueOf(permission));
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('PERMISSION_SYSTEM_CONFIG')")
     public List<PermissionReponse> getAllPermission(){
 
         var result = permissionRepository.findAll();

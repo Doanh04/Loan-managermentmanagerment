@@ -15,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -33,6 +34,7 @@ public class RolePermissionService {
 
 //    Service  Role_Permission
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('PERMISSION_SYSTEM_CONFIG')")
     public RolePermissionReponse createRolePermission(RolesEnum RoleRequest, PermissionEnum permissionEnum){
         Roles role = roleRepository.findById(RoleRequest)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
@@ -50,12 +52,14 @@ public class RolePermissionService {
         return rolePermissionMapper.toRolePermissionReponse(role);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('PERMISSION_SYSTEM_CONFIG')")
     public List<RolePermissionReponse> getAllRolePermission(){
         List<Roles> rolePermission = roleRepository.findAll();
 
         return rolePermission.stream().map(rolePermissionMapper::toRolePermissionReponse).toList();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('PERMISSION_SYSTEM_CONFIG')")
     public void removePermissionFromRole(RolesEnum roles, PermissionEnum permissions){
         Roles role = roleRepository.findById(roles)
                 .orElseThrow(()-> new AppException(ErrorCode.ROLE_NOT_FOUND));
@@ -68,6 +72,7 @@ public class RolePermissionService {
         roleRepository.save(role);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('PERMISSION_SYSTEM_CONFIG')")
     public void clearAllRolePermission(RolesEnum roles){
         Roles role = roleRepository.findById(roles)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
