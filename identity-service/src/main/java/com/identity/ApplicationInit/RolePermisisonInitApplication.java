@@ -88,7 +88,7 @@ public class RolePermisisonInitApplication {
                                 .role(RolesEnum.ACCOUNTANT)
                                 .Name_role(NameRoleEnum.ROLE_ACCOUNTANT)
                                 .permission(permissionAccountant)
-                                .Description("This is permission for accountantaccountant")
+                                .Description("This is permission for accountantaccountant                  ")
                         .build());
             }
         };
