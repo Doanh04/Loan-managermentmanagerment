@@ -4,9 +4,11 @@ import com.identity.Maper.UserMaper;
 import com.identity.Repositoty.InvalidatedRepository;
 import com.identity.Repositoty.UserRepository;
 import com.identity.dto.request.AuthenticationRequest;
+import com.identity.dto.request.IntrospectRequest;
 import com.identity.dto.request.LogoutRequest;
 import com.identity.dto.request.RefreshRequest;
 import com.identity.dto.response.AuthenticationResponse;
+import com.identity.dto.response.IntrospectResponse;
 import com.identity.entity.InvaldatedToken;
 import com.identity.entity.User;
 import com.identity.exception.AppException;
@@ -101,6 +103,22 @@ public class AuthenticationService {
             log.error("Cannot create token");
             throw new RuntimeException(e);
         }
+    }
+
+    public IntrospectResponse introspect(IntrospectRequest request){
+        var token = request.getToken();
+        boolean isValid = true;
+
+        try{
+            verifyToken(token, false);
+        }
+        catch (AppException | JOSEException | ParseException e){
+            isValid = false;
+        }
+
+        return IntrospectResponse.builder()
+                .valid(isValid)
+                .build();
     }
 
     public String buildScope(User user){
