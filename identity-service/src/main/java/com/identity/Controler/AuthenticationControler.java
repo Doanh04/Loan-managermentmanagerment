@@ -1,10 +1,12 @@
 package com.identity.Controler;
 
 import com.identity.dto.request.AuthenticationRequest;
+import com.identity.dto.request.IntrospectRequest;
 import com.identity.dto.request.LogoutRequest;
 import com.identity.dto.request.RefreshRequest;
 import com.identity.dto.response.ApiResponse;
 import com.identity.dto.response.AuthenticationResponse;
+import com.identity.dto.response.IntrospectResponse;
 import com.identity.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,6 +37,8 @@ public class AuthenticationControler {
                 .build();
     }
 
+
+
     @PostMapping("/logout")
     public ApiResponse<Void>logout(@RequestBody LogoutRequest request)throws ParseException, JOSEException  {
         authenticationService.logout(request);
@@ -47,6 +51,14 @@ public class AuthenticationControler {
             throws ParseException, JOSEException {
         var result = authenticationService.refresh(request);
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
+    }
+
+    @PostMapping("/intro-spect")
+    ApiResponse<IntrospectResponse>  introspect(@RequestBody IntrospectRequest request){
+        return ApiResponse.<IntrospectResponse>builder()
+                .message("success")
+                .result(authenticationService.introspect(request))
+                .build();
     }
 
 //    HTTP COOKIE ONLY
