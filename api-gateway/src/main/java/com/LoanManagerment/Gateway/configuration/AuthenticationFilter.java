@@ -30,7 +30,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
     @NonFinal
     private String[] publicEnpoints = {
-
+        "/identity/auth/user/create-user","/identity/auth/auth/login", "/identity/auth/auth/logout", "/identity/auth/auth/refresh"
     };
 
     @Value("${app.api-prefix}")
