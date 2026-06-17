@@ -86,7 +86,7 @@ public class authenticateServiceTest {
 
     @Test
     void test_generateToken_success(){
-        Mockito.when(userRepository.findByUsername(any())).thenReturn(user);
+//        Mockito.when(userRepository.findByUsername(any())).thenReturn(user);
         Mockito.when(encoder.matches("doanh123pd", "doanh123pd")).thenReturn(true);
 
         AuthenticationResponse authenticationResult = authenticationService.authenticate(authenticationRequest);
