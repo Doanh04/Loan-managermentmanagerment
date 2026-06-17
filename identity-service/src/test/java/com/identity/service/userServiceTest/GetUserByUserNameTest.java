@@ -84,7 +84,7 @@ public class GetUserByUserNameTest {
 
         @Test
         void getUserByUserName_Success(){
-            Mockito.when(userRepository.findByUsername(any())).thenReturn(user);
+//            Mockito.when(userRepository.findByUsername(any())).thenReturn(user);
             Mockito.when(userMaper.toUserResponse(any())).thenReturn(userResponse);
 
             UserCreationResponse result = userService.getByUserName("doanhpd01");

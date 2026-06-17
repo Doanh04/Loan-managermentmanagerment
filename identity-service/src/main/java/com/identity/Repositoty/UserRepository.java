@@ -10,15 +10,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
-
-    boolean existsByUsername( String username);
+    Optional<User> findByUsername(String username);
 
     boolean existsByEmailVerified( String emailVerified);
 
-    User findByUsername(String username);
+
 
     @Transactional
     @Modifying

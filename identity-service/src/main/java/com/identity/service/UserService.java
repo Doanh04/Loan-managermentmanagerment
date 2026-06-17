@@ -22,10 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,8 +36,17 @@ public class UserService {
 
     @Transactional
     public UserCreationResponse createUser(UserCreationRequest userRequest){
-        boolean userName = userRepository.existsByUsername(userRequest.getUserName());
-        if(userName) throw new AppException(ErrorCode.USERNAME_IS_EXITED);
+        Optional<User> exitingUser = userRepository.findByUsername(userRequest.getUserName());
+        if (exitingUser.isPresent()) {
+            User user = exitingUser.get();
+            if(UserStatus.ACTIVE.equals(user.getStatus())){
+                throw new AppException(ErrorCode.USER_EXITED);
+            }
+//            if(UserStatus.WAITING_ACTIVE.equals(user.getStatus())){
+//
+//
+//            }
+        }
 
         boolean email = userRepository.existsByEmailVerified(userRequest.getEmail_verified());
         if(email) throw new AppException(ErrorCode.EMAIL_VERIFIED_EXITED);
@@ -75,28 +81,27 @@ public class UserService {
     }
 
     public UserCreationResponse getByUserName(String userName){
-        User result = userRepository.findByUsername(userName);
-        if(result == null) throw new AppException(ErrorCode.USER_NOT_FOUND);
+        User result = userRepository.findByUsername(userName)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         return userMaper.toUserResponse(result);
     }
 
     @Transactional
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('PERMISSION_SYSTEM_CONFIG')")
-    public void deleteByUserName(String userName){
-        if(userName == null){
+    public void deleteByUserName(String userName) {
+        if (userName == null) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
 
-        boolean username = userRepository.existsByUsername(userName);
-        if(!username) throw new AppException(ErrorCode.USER_NOT_FOUND);
+        User user = userRepository.findByUsername(userName)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        User user = userRepository.findByUsername(userName);
-            if(user.getStatus()==UserStatus.BANNED){
-                throw new AppException(ErrorCode.StATUS_BANNED);
-            }
-
-        userRepository.deleteUserByUsername(userName, LocalDateTime.now());
+        if (UserStatus.ACTIVE.equals(user.getStatus())) {
+            userRepository.deleteUserByUsername(userName, LocalDateTime.now());
+        } else {
+            throw new AppException(ErrorCode.UKNOWN_ERROR);
+        }
     }
 
 }

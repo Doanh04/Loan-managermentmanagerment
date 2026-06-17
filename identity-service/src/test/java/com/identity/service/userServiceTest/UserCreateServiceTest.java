@@ -141,7 +141,7 @@ class UserCreateServiceTest {
 //    Create success
     @Test
     void createUserSuccess(){
-        Mockito.when(userRepository.existsByUsername(any())).thenReturn(false);
+//        Mockito.when(userRepository.existsByUsername(any())).thenReturn(false);
         Mockito.when(userRepository.existsByEmailVerified(any())).thenReturn(false);
         Mockito.when(userMaper.toUserEntity(any())).thenReturn(user);
         Mockito.when(passwordEncoder.encode("Doanh@123")).thenReturn("hashedPasword");
@@ -158,7 +158,7 @@ class UserCreateServiceTest {
     @Test
     void createUser_false_ExitsByUserName(){
 //        Mockito.when(userMaper.toUserEntity(any())).thenReturn(user);
-        Mockito.when(userRepository.existsByUsername(any())).thenReturn(true);
+//        Mockito.when(userRepository.existsByUsername(any())).thenReturn(true);
 
         AppException exception = assertThrows(AppException.class, () ->{
             userService.createUser(userRequest);
@@ -169,7 +169,7 @@ class UserCreateServiceTest {
 
     @Test
     void create_false_ExitsByEmail(){
-        Mockito.when(userRepository.existsByUsername(any())).thenReturn(false);
+//        Mockito.when(userRepository.existsByUsername(any())).thenReturn(false);
         Mockito.when(userRepository.existsByEmailVerified(any())).thenReturn(true);
 
         AppException exception = assertThrows(AppException.class, ()->{
