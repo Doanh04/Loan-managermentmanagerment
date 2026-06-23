@@ -16,6 +16,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 
 @Configuration
@@ -26,14 +27,15 @@ public class UserAdminInitApplication {
     ApplicationRunner userInitApplication(UserRepository userRepository, RolesRepository rolesRepository, PerrmissionRepository perrmissionRepository, PasswordEncoder passwordEncoder){
         return (args -> {
             var role = rolesRepository.findById(RolesEnum.ADMIN).orElseThrow(() -> new AppException(ErrorCode.PERMISSION_IS_EXITED));
-            if(!userRepository.existsByUsername("Admin")){
+            Optional<User> user = userRepository.findByUsername("Admin");
+            if(user.isEmpty()){
                 userRepository.save(User.builder()
-                                .username("Admin")
-                                .password(passwordEncoder.encode("admin"))
-                                .status(UserStatus.ACTIVE)
-                                .Roles(Set.of(role))
-                                .verified(true)
-                                .create_at(LocalDateTime.now())
+                        .username("Admin")
+                        .password(passwordEncoder.encode("admin"))
+                        .status(UserStatus.ACTIVE)
+                        .Roles(Set.of(role))
+                        .verified(true)
+                        .create_at(LocalDateTime.now())
                         .build());
             }
         });

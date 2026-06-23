@@ -1,5 +1,6 @@
 package com.identity.service;
 
+import com.event.dto.messageOtpDto;
 import com.identity.Constain.RolesEnum;
 import com.identity.Constain.UserStatus;
 import com.identity.Maper.UserMaper;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,19 +35,13 @@ public class UserService {
     UserMaper userMaper;
     PasswordEncoder passwordEncoder;
     RolesRepository roleRepository;
+    KafkaTemplate<String, Object> kafkaTemplate;
 
     @Transactional
     public UserCreationResponse createUser(UserCreationRequest userRequest){
         Optional<User> exitingUser = userRepository.findByUsername(userRequest.getUserName());
         if (exitingUser.isPresent()) {
-            User user = exitingUser.get();
-            if(UserStatus.ACTIVE.equals(user.getStatus())){
-                throw new AppException(ErrorCode.USER_EXITED);
-            }
-//            if(UserStatus.WAITING_ACTIVE.equals(user.getStatus())){
-//
-//
-//            }
+            throw new AppException(ErrorCode.USER_EXITED);
         }
 
         boolean email = userRepository.existsByEmailVerified(userRequest.getEmail_verified());
@@ -61,7 +57,7 @@ public class UserService {
 
         user.setRoles(roles);
         user.setVerified(false);
-        user.setStatus(UserStatus.WAITING_ACTIVE);
+        user.setStatus(UserStatus.IN_ACTIVE);
         user.setCreate_at(LocalDateTime.now());
 
         try{
@@ -70,6 +66,14 @@ public class UserService {
         catch (DataIntegrityViolationException exception){
             throw new AppException(ErrorCode.USER_EXITED);
         }
+
+        messageOtpDto otpDto = messageOtpDto.builder()
+                .chanel("SMS")
+                .repicient(user.getPhone_Number())
+                .subject("Welcome")
+                .body("....")
+                .build();
+        kafkaTemplate.send("notification-sms", otpDto);
 
         return userMaper.toUserResponse(user);
     }
