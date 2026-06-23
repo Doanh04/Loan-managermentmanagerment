@@ -61,8 +61,7 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 //        PasswordEncoder encoder = new BCryptPasswordEncoder(10);
 
-        var userName = userRepository.findByUsername(request.getUserName());
-        if (userName == null) throw new AppException(ErrorCode.USER_NOT_FOUND);
+        var userName = userRepository.findByUsername(request.getUserName()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         boolean authenticated = encoder.matches(request.getPassword(), userName.getPassword());
 
@@ -89,6 +88,7 @@ public class AuthenticationService {
                 .claim("User Name", user.getUsername())
                 .claim("email", user.getEmailVerified())
                 .claim("phone", user.getPhone_Number())
+                .claim("Status", user.getStatus())
                 .build();
 
         Payload payload = new Payload(jwtclaimSet.toJSONObject());
