@@ -49,7 +49,7 @@ public class User {
     @Column(name = "update_at")
     LocalDateTime update_at;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "User_role",
             joinColumns = @JoinColumn(name = "User_Id"),

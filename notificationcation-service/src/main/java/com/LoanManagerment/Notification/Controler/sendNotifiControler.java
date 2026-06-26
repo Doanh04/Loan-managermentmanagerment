@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class sendNotifiControler {
     NotificationService notificationService;
 
-    @KafkaListener(topics = "notification-sms")
+    @KafkaListener(topics = "notification-sms-v3")
     public void listionNotificationSms(messageOtpDto sms){
         log.info("Message sms:{} ", sms );
         notificationService.sendOtp(SmsRequest.builder()
