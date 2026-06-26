@@ -6,6 +6,7 @@ import com.identity.Constain.UserStatus;
 import com.identity.Maper.UserMaper;
 import com.identity.Repositoty.RolesRepository;
 import com.identity.Repositoty.UserRepository;
+import com.identity.Ultil.ConfigTopicKafka;
 import com.identity.dto.request.UserCreationRequest;
 import com.identity.dto.response.UserCreationResponse;
 import com.identity.entity.Roles;
@@ -36,6 +37,7 @@ public class UserService {
     PasswordEncoder passwordEncoder;
     RolesRepository roleRepository;
     KafkaTemplate<String, Object> kafkaTemplate;
+    ConfigTopicKafka configTopicKafka;
 
     @Transactional
     public UserCreationResponse createUser(UserCreationRequest userRequest){
@@ -52,17 +54,13 @@ public class UserService {
 
                 userRepository.save(exiting);
 
-                messageOtpDto otpDto = messageOtpDto.builder()
-                        .chanel("SMS")
-                        .repicient(exiting.getPhone_Number())
-                        .subject("Welcome")
-                        .body("....")
-                        .build();
-                kafkaTemplate.send("notification-sms-v3", otpDto);
+                configTopicKafka.sendSms(userRequest.getPhoneNumber());
 
                 return userMaper.toUserResponse(exiting);
             }
         }
+
+
 
         boolean email = userRepository.existsByEmailVerified(userRequest.getEmail_verified());
         if(email) throw new AppException(ErrorCode.EMAIL_VERIFIED_EXITED);
@@ -87,13 +85,7 @@ public class UserService {
             throw new AppException(ErrorCode.USER_EXITED);
         }
 
-        messageOtpDto otpDto = messageOtpDto.builder()
-                .chanel("SMS")
-                .repicient(user.getPhone_Number())
-                .subject("Welcome")
-                .body("....")
-                .build();
-        kafkaTemplate.send("notification-sms-v3", otpDto);
+        configTopicKafka.sendSms(user.getPhone_Number());
 
         return userMaper.toUserResponse(user);
     }
