@@ -19,6 +19,8 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    properties:
+      spring.json.add.type.headers: false
 jwt:
   signerKey: "WPd91T2L7k0TSu1TtolwNj8hQlV7xMqZILCFg99VEmk="
   valid-duration: 3600

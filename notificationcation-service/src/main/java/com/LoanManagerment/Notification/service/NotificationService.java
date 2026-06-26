@@ -12,12 +12,14 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 
+@Slf4j
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -32,25 +34,28 @@ public class NotificationService {
     RandomOtp randomOtp;
 
     public SmsResponse sendOtp(SmsRequest smsRequest){
+
+        String otp = RandomOtp.OtpRandomUtil();
+        String key = "otp:sms:" + smsRequest.getRecipient();
+        redistemplate.opsForValue().set(
+                key,
+                otp,
+                Duration.ofMinutes(10)
+        );
+        log.info("Key và OTP là {}",key + otp);
         SmsRequest sms = SmsRequest.builder()
                 .recipient(smsRequest.getRecipient())
-                .sender("D_COST")
+                .sender("DCOST")
                 .unicodeEnabled(true)
-                .content("Đây là mã dùng một lần để xác thực tài khoản của bạn. Mã xác thực là " + smsRequest.getRecipient()
-                + ", nhắc lại. Mã xác thực là " + smsRequest.getRecipient())
+                .content("DCOST: Vui lòng không chia sẻ mã OTP này, Đây là mã dùng một lần để xác thực tài khoản của bạn, mã xác nhận có thời gian 10 phút. Mã xác thực là " + smsRequest.getRecipient()
+                + ", nhắc lại. Mã xác thực là " + otp + "nhắc lại OTP là: " + otp)
                 .build();
 
         try{
-            String otp = RandomOtp.OtpRandomUtil();
-            String key = smsRequest.getRecipient();
-            redistemplate.opsForValue().set(
-                    key,
-                    otp,
-                    Duration.ofMinutes(10)
-            );
             return smsClient.sendOTPSms(brevoApiKey, sms);
         }
         catch (FeignException e){
+            log.error("Lỗi khi gọi Brevo API: {}", e.contentUTF8());
             throw new AppException(ErrorCode.CANNOT_SEND_SMS);
         }
     }

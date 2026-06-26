@@ -41,7 +41,27 @@ public class UserService {
     public UserCreationResponse createUser(UserCreationRequest userRequest){
         Optional<User> exitingUser = userRepository.findByUsername(userRequest.getUserName());
         if (exitingUser.isPresent()) {
-            throw new AppException(ErrorCode.USER_EXITED);
+            User exiting = exitingUser.get();
+
+            if(exiting.getStatus() == UserStatus.WAITING_ACTIVE || exiting.getStatus() == UserStatus.ACTIVE || exiting.getStatus() == UserStatus.BANNED
+                || exiting.getStatus() == UserStatus.LOCKED) {
+                throw new AppException(ErrorCode.USER_EXITED);
+            };
+            if(exiting.getStatus() == UserStatus.IN_ACTIVE){
+                exiting.setPassword(passwordEncoder.encode(userRequest.getPassWord()));
+
+                userRepository.save(exiting);
+
+                messageOtpDto otpDto = messageOtpDto.builder()
+                        .chanel("SMS")
+                        .repicient(exiting.getPhone_Number())
+                        .subject("Welcome")
+                        .body("....")
+                        .build();
+                kafkaTemplate.send("notification-sms-v3", otpDto);
+
+                return userMaper.toUserResponse(exiting);
+            }
         }
 
         boolean email = userRepository.existsByEmailVerified(userRequest.getEmail_verified());
@@ -73,7 +93,7 @@ public class UserService {
                 .subject("Welcome")
                 .body("....")
                 .build();
-        kafkaTemplate.send("notification-sms", otpDto);
+        kafkaTemplate.send("notification-sms-v3", otpDto);
 
         return userMaper.toUserResponse(user);
     }
