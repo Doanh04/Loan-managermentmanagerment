@@ -1,7 +1,9 @@
 package com.identity.Ultil;
 
+import com.event.dto.SendEmailDTO;
 import com.event.dto.messageOtpDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
@@ -21,10 +23,11 @@ public class ConfigTopicKafka {
         kafkaTemplate.send("notification-sms-v3", Otp);
     }
 
-    public void sendEmailWelcome(String email){
-        messageOtpDto sendEmail = messageOtpDto.builder()
+    public void sendEmailWelcome(String email, String name){
+        SendEmailDTO sendEmail = SendEmailDTO.builder()
                 .chanel("EMAIL")
                 .repicient(email)
+                .name(name)
                 .subject("Welcome")
                 .body("..............")
                 .build();

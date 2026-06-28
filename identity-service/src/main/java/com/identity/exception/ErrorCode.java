@@ -32,7 +32,9 @@ public enum ErrorCode {
     UNAUTHENTICATED(1019, "You do not have permission", HttpStatus.FORBIDDEN),
     UNAUTHORIZED(1020, "UserName or password incorrect", HttpStatus.FORBIDDEN),
     USER_NOT_FOUND(1021, "do not find user with user name", HttpStatus.NOT_FOUND),
-    StATUS_BANNED(1022, "state already implemented", HttpStatus.BAD_REQUEST)
+    StATUS_BANNED(1022, "state already implemented", HttpStatus.BAD_REQUEST),
+    OTP_INVALID(1023, "OTP Invalid", HttpStatus.BAD_REQUEST),
+    OTP_EXPIRED(1024, "OTP expired", HttpStatus.BAD_REQUEST)
             ;
 
     ErrorCode(int code, String mesage, HttpStatusCode statusCode) {

@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SercurityConfig {
     public static  final String[] PUBLIC_ENPOINT = {
-
+        "/send/email"
     };
 
     private final CustomJWTDecoder customJwtDecoder;
