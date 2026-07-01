@@ -4,3 +4,9 @@ target/
 .mvn/
 mvnw
 mvnw.cmd
+node_modules/
+.env.*
+*.log
+dist/
+package-lock.json
+package.json

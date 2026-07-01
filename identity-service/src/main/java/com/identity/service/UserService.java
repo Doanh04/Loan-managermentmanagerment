@@ -76,7 +76,7 @@ public class UserService {
 
         user.setRoles(roles);
         user.setVerified(false);
-        user.setStatus(UserStatus.IN_ACTIVE);
+        user.setStatus(UserStatus.WAITING_ACTIVE);
         user.setCreate_at(LocalDateTime.now());
 
         try{
