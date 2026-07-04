@@ -14,7 +14,7 @@ import java.util.List;
 public interface UserMaper {
     @Mapping(source = "userName", target = "username")
     @Mapping(source = "passWord", target = "password")
-    @Mapping(source = "phoneNumber", target = "phone_Number")
+    @Mapping(source = "phoneNumber", target = "phoneNumber")
     @Mapping(source = "email_verified", target = "emailVerified")
     User toUserEntity(UserCreationRequest userRequest);
 
@@ -23,7 +23,7 @@ public interface UserMaper {
     @Mapping(source = "emailVerified", target = "email_verified")
     @Mapping(source = "verified", target = "verified")
     @Mapping(source = "roles", target = "rolePermissionResponse")
-    @Mapping(source = "phone_Number", target = "phoneNumber")
+    @Mapping(source = "phoneNumber", target = "phoneNumber")
     @Mapping(source = "create_at", target = "create_at")
     UserCreationResponse toUserResponse(User userEntity);
 

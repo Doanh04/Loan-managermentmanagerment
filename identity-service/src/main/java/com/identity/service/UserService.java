@@ -6,7 +6,10 @@ import com.identity.Constain.UserStatus;
 import com.identity.Maper.UserMaper;
 import com.identity.Repositoty.RolesRepository;
 import com.identity.Repositoty.UserRepository;
+import com.identity.Ultil.ConfigTopicKafka;
+import com.identity.dto.request.OTPRequest;
 import com.identity.dto.request.UserCreationRequest;
+import com.identity.dto.response.SendEmailResponse;
 import com.identity.dto.response.UserCreationResponse;
 import com.identity.entity.Roles;
 import com.identity.entity.User;
@@ -18,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,7 +39,8 @@ public class UserService {
     UserMaper userMaper;
     PasswordEncoder passwordEncoder;
     RolesRepository roleRepository;
-    KafkaTemplate<String, Object> kafkaTemplate;
+    ConfigTopicKafka configTopicKafka;
+    RedisTemplate<String, Object> redisTemplate;
 
     @Transactional
     public UserCreationResponse createUser(UserCreationRequest userRequest){
@@ -52,13 +57,7 @@ public class UserService {
 
                 userRepository.save(exiting);
 
-                messageOtpDto otpDto = messageOtpDto.builder()
-                        .chanel("SMS")
-                        .repicient(exiting.getPhone_Number())
-                        .subject("Welcome")
-                        .body("....")
-                        .build();
-                kafkaTemplate.send("notification-sms-v3", otpDto);
+                configTopicKafka.sendSms(userRequest.getPhoneNumber());
 
                 return userMaper.toUserResponse(exiting);
             }
@@ -77,7 +76,7 @@ public class UserService {
 
         user.setRoles(roles);
         user.setVerified(false);
-        user.setStatus(UserStatus.IN_ACTIVE);
+        user.setStatus(UserStatus.WAITING_ACTIVE);
         user.setCreate_at(LocalDateTime.now());
 
         try{
@@ -87,15 +86,30 @@ public class UserService {
             throw new AppException(ErrorCode.USER_EXITED);
         }
 
-        messageOtpDto otpDto = messageOtpDto.builder()
-                .chanel("SMS")
-                .repicient(user.getPhone_Number())
-                .subject("Welcome")
-                .body("....")
-                .build();
-        kafkaTemplate.send("notification-sms-v3", otpDto);
+        configTopicKafka.sendSms(user.getPhoneNumber());
 
         return userMaper.toUserResponse(user);
+    }
+
+    @Transactional
+    public void verifyOTP(OTPRequest request){
+        String key = "otp:sms:" + request.getPhoneNumber();
+        String catcheOtp =(String) redisTemplate.opsForValue().get(key);
+
+        if(catcheOtp == null){
+            throw new AppException(ErrorCode.OTP_EXPIRED);
+        }
+        if(!catcheOtp.equals(request.getOTP())){
+            throw new AppException(ErrorCode.OTP_INVALID);
+        }
+        User user = userRepository.findByPhoneNumber(request.getPhoneNumber())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        user.setStatus(UserStatus.WAITING_ACTIVE);
+        userRepository.save(user);
+        configTopicKafka.sendEmailWelcome(user.getEmailVerified(), user.getUsername());
+
+        redisTemplate.delete(key);
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('PERMISSION_SYSTEM_CONFIG')")

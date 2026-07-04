@@ -87,7 +87,7 @@ public class AuthenticationService {
                 .claim("scope", buildScope(user))
                 .claim("User Name", user.getUsername())
                 .claim("email", user.getEmailVerified())
-                .claim("phone", user.getPhone_Number())
+                .claim("phone", user.getPhoneNumber())
                 .claim("Status", user.getStatus())
                 .build();
 

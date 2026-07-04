@@ -18,6 +18,7 @@ import java.time.Instant;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserCreationRequest {
+    @Size(min = 10, message = "INVALID_USERNAME")
     String userName;
     @Size(min = 8, message = "INVALID_PASSWORD")
     String passWord;

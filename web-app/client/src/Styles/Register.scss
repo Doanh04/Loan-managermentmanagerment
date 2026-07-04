@@ -1,0 +1,289 @@
+@use '__variable' as var;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+.registerLayout {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  min-height: 100vh;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background-image: url("../assets/Images/Background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    filter: blur(10px);
+
+    z-index: -1;
+    transform: scale(1.1);
+  }
+
+  &__content {
+    // height: 100vh;
+    &--image {
+      position: absolute;
+      bottom: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .mobile-logo {
+      display: none;
+    }
+
+    &--title {
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 1),
+        rgba(255, 255, 255, 0)
+      );
+      min-height: 100vh;
+      &-logo {
+        img {
+          width: 150px;
+          height: auto;
+        }
+        display: flex;
+
+        &-text {
+          display: flex;
+          align-items: center;
+          nav {
+            font-size: 40px;
+            font-weight: bold;
+            background: linear-gradient(to right, #1c3e75, #2e896e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+          }
+        }
+        margin-bottom: 100px;
+      }
+        &-text {
+            h1 {
+            font-size: 50px;
+            font-weight: bold;
+            color: #1c3e75;
+            font-family: 'Montserrat', sans-serif;
+            }
+            p{
+                font-weight: 500;
+                font-size: 20px;
+                color: #1c3e75;
+                font-family: 'Montserrat', sans-serif;
+                margin: 20px;
+            }
+        }
+        &-icons{
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            margin: 50px 5px 0 5px;
+
+            .anticon {
+                font-size: 30px;
+                color: #249d98;
+                margin: 0 10px 10px 10px;
+                padding: 10px;
+                border-radius: 25%;
+                background: #ffffff83;
+            }
+            p{
+                font-weight: 500;
+                font-size: 18px;
+                color: #1c3e75;
+                font-family: 'Montserrat', sans-serif;
+                margin: 20px;
+            }
+        }
+    }
+
+    &--forms{
+      background: #ffffffab;  
+      padding: 80px 50px;
+      margin: 60px 0;
+      max-width: 600px;
+      right: 100px;
+      border-radius: 10px;
+
+      .title{
+        margin-bottom: 30px;
+          h1{
+            font-size: 30px;
+            font-weight: bold;
+            color: var.$secondary-color;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+          }
+          p{
+            color: rgba(128, 128, 128, 0.562);
+            font-size: 12px;
+            text-align: center;
+          }
+      }
+      .ant-row{
+        margin-bottom: 20px;
+        .ant-input{
+          height: 45px;
+        }
+      }
+      .ant-btn{
+        width: 100%;
+        height: 45px;
+        background: linear-gradient(to right, #1e5dc4, #35a789);
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        &:hover{
+        background: linear-gradient(to right, #1c3e75, #2d8a70);    
+        outline: none;  
+      
+      }
+      }
+    }
+  }
+}
+// Responsive styles XL screens
+@media (max-width: 1200px) {
+  .registerLayout {
+
+  &__content {
+
+    &--title {
+      &-logo {
+        img {
+          width: 130px;
+          height: auto;
+        }
+        display: flex;
+
+        &-text {
+          display: flex;
+          align-items: center;
+          nav {
+            font-size: 40px;
+          }
+        }
+      }
+        &-text {
+            h1 {
+            font-size: 40px;
+            }
+            p{
+                font-size: 13px;
+            }
+        }
+        &-icons{
+
+            p{
+                font-size: 13px;
+            }
+        }
+    }
+
+    &--forms{
+
+      .title{
+          h1{
+            font-size: 25px;
+          }
+      }
+    }
+  }
+}
+}
+//  Responsive styles 992px screens
+@media (max-width: 992px) {
+
+  .registerLayout {
+
+    &__content {
+
+      position: relative;
+      min-height: 100vh;
+
+      .ant-row {
+        display: flex;
+        justify-content: center;
+      }
+
+      &--image {
+        display: none;
+      }
+
+      &--title {
+        display: none;
+      }
+      .mobile-logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 1),
+        rgba(255, 255, 255, 0)
+      );        margin-top: 40px;
+        margin-bottom: 25px;
+
+        img {
+          width: 150px;
+          height: auto;
+        }
+
+        span {
+          font-size: 36px;
+          font-weight: 700;
+
+          background: linear-gradient(to right, #1c3e75, #2e896e);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+        }
+      }
+
+      .ant-col{
+            flex:none;
+            max-width:none;      }
+      &--forms {
+          transform:translateX(15%);
+          width:80%;
+          margin:auto;
+        .title {
+          text-align: center;
+          margin-bottom: 30px;
+
+          h1 {
+            font-size: 34px;
+          }
+
+          p {
+            font-size: 14px;
+          }
+        }
+
+        .ant-input,
+        .ant-input-password {
+          height: 48px;
+        }
+
+        .ant-btn {
+          height: 48px;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}

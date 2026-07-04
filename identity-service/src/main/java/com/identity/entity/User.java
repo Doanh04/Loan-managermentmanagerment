@@ -37,7 +37,7 @@ public class User {
     boolean verified;
 
     @Column(name = "Phone_Number", columnDefinition = "VARCHAR(12)", unique = true, nullable = false)
-    String phone_Number;
+    String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Status", columnDefinition = "VARCHAR(50)")

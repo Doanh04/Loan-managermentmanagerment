@@ -1,5 +1,6 @@
 package com.identity.Controler;
 
+import com.identity.dto.request.OTPRequest;
 import com.identity.dto.request.UserCreationRequest;
 import com.identity.dto.response.ApiResponse;
 import com.identity.dto.response.UserCreationResponse;
@@ -47,6 +48,14 @@ public class UserControler {
         userService.deleteByUserName(userName);
         return ApiResponse.builder()
                 .message("Delete user success")
+                .build();
+    }
+    @PostMapping("/verify-otp")
+    public ApiResponse verifyOtp(@RequestBody OTPRequest request){
+        userService.verifyOTP(request);
+
+        return ApiResponse.builder()
+                .message("Verify success")
                 .build();
     }
 }
