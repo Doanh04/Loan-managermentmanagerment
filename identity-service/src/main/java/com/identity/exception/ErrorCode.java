@@ -34,7 +34,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(1021, "do not find user with user name", HttpStatus.NOT_FOUND),
     StATUS_BANNED(1022, "state already implemented", HttpStatus.BAD_REQUEST),
     OTP_INVALID(1023, "OTP Invalid", HttpStatus.BAD_REQUEST),
-    OTP_EXPIRED(1024, "OTP expired", HttpStatus.BAD_REQUEST)
+    OTP_EXPIRED(1024, "OTP expired", HttpStatus.BAD_REQUEST),
+    INVALID_USERNAME(1025, "Invalid username", HttpStatus.BAD_REQUEST)
             ;
 
     ErrorCode(int code, String mesage, HttpStatusCode statusCode) {
