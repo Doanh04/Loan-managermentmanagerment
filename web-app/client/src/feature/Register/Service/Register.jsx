@@ -28,7 +28,7 @@ const registerUser = async (userData) => {
     }
     catch (error) {
         console.error('Lỗi khi đăng ký người dùng:', error);
-        throw new error;
+        throw error;
     }
 }
 
@@ -58,7 +58,7 @@ const verifyUser = async (userData) => {
     }
     catch (error) {
         console.error('Lỗi khi xác thực người dùng:', error);
-        throw new error;
+        throw error;
     }
 }
 export { registerUser, verifyUser };

@@ -1,4 +1,4 @@
-import RegisterLayout from "../Layout/RegisterLayout";
+import RegisterControler from "../feature/Register/Controler/RegisterControler";
 import LoginLayout from "../Layout/LoginLayout";
 
 export const Routers = [
@@ -9,6 +9,6 @@ export const Routers = [
     },
     {
         path: "/register",
-        element: <RegisterLayout />
+        element: <RegisterControler />
     },
 ]
