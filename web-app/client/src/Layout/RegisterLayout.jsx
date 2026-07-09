@@ -7,8 +7,15 @@ import {
   ThunderboltOutlined,
 } from "@ant-design/icons";
 import { Row, Col, Form, Input, Button } from "antd";
+import { useEffect } from "react";
 
-function RegisterLayout() {
+function RegisterLayout({loading, formValues, handleChange, handleSubmit, handleReset}) {
+  
+  const [form] = Form.useForm();
+  useEffect(() => {
+    form.setFieldsValue(formValues);
+  }, [formValues, form]);
+  
   return (
     <>
       <div className="registerLayout">
@@ -20,7 +27,7 @@ function RegisterLayout() {
                 <img src={logo} alt="Logo" />
                 <span>D-COST</span>
           </div>
-          <Row justify="space-between" align="stretch">
+          <Row justify="space-between" align="stretch" gutter={[0, 16]}>
             <Col span={10} className="registerLayout__content--title">
               <div style={{ margin: "50px" }}>
                 <div className="registerLayout__content--title-logo">
@@ -54,7 +61,14 @@ function RegisterLayout() {
                   <h1>Đăng ký tài khoản</h1>
                   <p>(Sau khi đăng ký, bạn sẽ nhận được mã xác nhận qua số điện thoại.)</p>
                 </div>
-                <Form onFinish={(values) => console.log(values)} >
+                <Form 
+                  form={form}
+                  name="registerForm"
+                  layout="vertical"
+                  onValuesChange={handleChange}
+                  onReset={handleReset}
+                  autoComplete="off"
+                  onFinish={handleSubmit} >
                     <p>Tên đăng nhập</p>
                     <Form.Item
                         name="userName"
@@ -109,7 +123,7 @@ function RegisterLayout() {
                         <Input placeholder="Email" />
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" className="registerLayout__content--forms-button">
+                        <Button loading={loading} type="primary" htmlType="submit" className="registerLayout__content--forms-button">
                             Tiếp theo 
                         </Button>
                     </Form.Item>
